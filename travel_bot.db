@@ -1,0 +1,42 @@
+import sqlite3
+
+def init_db():
+    conn = sqlite3.connect('travel_bot.db')
+    c = conn.cursor()
+
+    # 사용자 요청 테이블
+    c.execute('''
+    CREATE TABLE IF NOT EXISTS user_requests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        gender TEXT,
+        age_grp INTEGER,
+        travel_motive_1 INTEGER,
+        travel_mission_int INTEGER,
+        travel_companions_num INTEGER,
+        travel_styl_1 INTEGER,
+        travel_styl_2 INTEGER,
+        travel_styl_3 INTEGER,
+        travel_styl_4 INTEGER,
+        travel_styl_5 INTEGER,
+        travel_styl_6 INTEGER,
+        travel_styl_7 INTEGER,
+        travel_styl_8 INTEGER,
+        selected_area TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    ''')
+
+    # 추천 결과 테이블
+    c.execute('''
+    CREATE TABLE IF NOT EXISTS recommendations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_request_id INTEGER,
+        area_name TEXT,
+        score REAL,
+        star INTEGER,
+        FOREIGN KEY (user_request_id) REFERENCES user_requests(id)
+    );
+    ''')
+
+    conn.commit()
+    conn.close()
